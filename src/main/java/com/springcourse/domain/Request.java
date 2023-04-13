@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,12 @@ import java.util.List;
 @Data
 @Builder
 @Entity(name = "request")
-public class Request {
+public class Request implements Serializable {
+
+    /*
+     * Serial Version UUID
+     * */
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
