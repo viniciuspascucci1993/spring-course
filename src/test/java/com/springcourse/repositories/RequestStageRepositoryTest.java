@@ -72,7 +72,7 @@ public class RequestStageRepositoryTest {
     @Test
     public void shouldListRequestStageTest() {
 
-        List<RequestStage> listOfRequestStage = requestStageRepository.findAll();
+        List<RequestStage> listOfRequestStage = requestStageRepository.findAllByRequestId(1L);
         assertThat(listOfRequestStage.size()).isEqualTo(1);
 
     }
