@@ -1,7 +1,9 @@
 package com.springcourse.controller;
 
+import com.springcourse.domain.Request;
 import com.springcourse.domain.User;
 import com.springcourse.dto.UserLoginDTO;
+import com.springcourse.services.RequestService;
 import com.springcourse.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +17,13 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private RequestService requestService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RequestService requestService) {
         this.userService = userService;
+        this.requestService = requestService;
+
     }
 
     @PostMapping("/login")
@@ -52,5 +57,12 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
 
     }
+
+    @GetMapping("/{id}/requests")
+    public ResponseEntity<List<Request>> getLisstAllRequestsById(@PathVariable(name = "id") Long id) {
+        List<Request> listRequests = requestService.listAllByOwnerId(id);
+        return ResponseEntity.ok(listRequests);
+    }
+
 
 }
