@@ -1,7 +1,9 @@
 package com.springcourse.controller;
 
 import com.springcourse.domain.Request;
+import com.springcourse.domain.RequestStage;
 import com.springcourse.services.RequestService;
+import com.springcourse.services.RequestStageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +16,12 @@ import java.util.List;
 public class RequestController {
 
     private RequestService requestService;
+    private RequestStageService requestStageService;
 
     @Autowired
-    public RequestController(RequestService requestService) {
+    public RequestController(RequestService requestService, RequestStageService requestStageService) {
         this.requestService = requestService;
+        this.requestStageService = requestStageService;
     }
 
     @GetMapping(value = "/{id}")
@@ -43,5 +47,11 @@ public class RequestController {
     public ResponseEntity<List<Request>> getRequestListAll() {
         List<Request> listRequests = requestService.getList();
         return ResponseEntity.ok(listRequests);
+    }
+
+    @GetMapping("/{id}/request-stages")
+    public ResponseEntity<List<RequestStage>> getListOffAllRequestStages(@PathVariable(name = "id") Long id) {
+        List<RequestStage> stages = requestStageService.listAllByRequestId(id);
+        return ResponseEntity.ok(stages);
     }
 }
