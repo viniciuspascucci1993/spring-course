@@ -18,8 +18,12 @@ public class RequestService {
 
     public Request save( Request request ) {
         request = Request.builder()
+                .subject(request.getSubject())
+                .description(request.getDescription())
+                .code(request.getCode())
                 .state(RequestState.OPEN)
                 .creationDate(new Date())
+                .owner(request.getOwner())
                 .build();
         Request createdRequest = requestRepository.save(request);
         return createdRequest;

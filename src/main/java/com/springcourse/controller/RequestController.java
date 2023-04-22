@@ -33,7 +33,7 @@ public class RequestController {
     @PostMapping
     public ResponseEntity<Request> save(@RequestBody Request request) {
         Request createdRequest = requestService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRequest);
     }
 
     @PutMapping("/{id}")

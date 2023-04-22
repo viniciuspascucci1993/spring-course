@@ -1,10 +1,8 @@
 package com.springcourse.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springcourse.enums.RequestState;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,7 +26,7 @@ public class Request implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 75, nullable = false)
+    @Column(length = 75)
     private String subject;
 
     @Column(columnDefinition = "text")
@@ -38,17 +36,18 @@ public class Request implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 10)
     private Integer code;
 
-    @Column(length = 12, nullable = false)
+    @Column(length = 12)
     @Enumerated(EnumType.STRING)
     private RequestState state;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
+    @Getter(onMethod = @__({@JsonIgnore}))
     @OneToMany(mappedBy = "request")
     private List<RequestStage> stages = new ArrayList<>();
 }

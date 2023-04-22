@@ -1,10 +1,9 @@
 package com.springcourse.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.springcourse.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -39,6 +38,8 @@ public class User implements Serializable {
     @Column(length = 15, nullable = false)
     private Integer code;
 
+    @Getter(onMethod = @__({@JsonIgnore}))
+    @Setter(onMethod = @__({@JsonProperty}))
     @Column(length = 100, nullable = false)
     private String password;
 
@@ -46,9 +47,11 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Getter(onMethod = @__({@JsonIgnore}))
     @OneToMany(mappedBy = "owner")
     private List<Request> requests = new ArrayList<Request>();
 
+    @Getter(onMethod = @__({@JsonIgnore}))
     @OneToMany(mappedBy = "owner")
     private List<RequestStage> stages = new ArrayList<RequestStage>();
 }
