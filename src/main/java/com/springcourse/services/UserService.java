@@ -1,9 +1,9 @@
 package com.springcourse.services;
 
 import com.springcourse.domain.User;
+import com.springcourse.exceptions.NotFoundException;
 import com.springcourse.repositories.UserRepository;
 import com.springcourse.services.util.HashUtil;
-import org.hibernate.cfg.SecondPass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,8 @@ public class UserService {
 
     public User getById( Long id ) {
         Optional<User> getById = userRepository.findById(id);
-        return getById.get();
+
+        return getById.orElseThrow(() -> new NotFoundException("Resource not found " + id));
     }
 
     public List<User> getList() {

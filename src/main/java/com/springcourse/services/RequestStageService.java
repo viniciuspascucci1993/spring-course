@@ -2,6 +2,7 @@ package com.springcourse.services;
 
 import com.springcourse.domain.RequestStage;
 import com.springcourse.enums.RequestState;
+import com.springcourse.exceptions.NotFoundException;
 import com.springcourse.repositories.RequestRepository;
 import com.springcourse.repositories.RequestStageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class RequestStageService {
 
     public RequestStage getById(Long id) {
         Optional<RequestStage> requestStageRepositoryById = requestStageRepository.findById(id);
-        return requestStageRepositoryById.get();
+        return requestStageRepositoryById.orElseThrow(() -> new NotFoundException("Resource not found " + id));
     }
 
     public List<RequestStage> listAllByRequestId(Long id) {
