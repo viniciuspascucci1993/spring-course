@@ -67,9 +67,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}/requests")
-    public ResponseEntity<List<Request>> getLisstAllRequestsById(@PathVariable(name = "id") Long id) {
-        List<Request> listRequests = requestService.listAllByOwnerId(id);
-        return ResponseEntity.ok(listRequests);
+    public ResponseEntity<PaginationModel<Request>> getLisstAllRequestsById(
+            @PathVariable(name = "id") Long id,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size) {
+
+        PaginationRequestModel paginationRequestModel = new PaginationRequestModel(page, size);
+        PaginationModel<Request> paginationModel = requestService.listAllByOwnerIdOnLazyModel(id,
+                paginationRequestModel);
+        return ResponseEntity.ok(paginationModel);
     }
 
 

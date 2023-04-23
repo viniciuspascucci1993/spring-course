@@ -1,11 +1,17 @@
 package com.springcourse.services;
 
+import com.springcourse.domain.Request;
 import com.springcourse.domain.RequestStage;
 import com.springcourse.enums.RequestState;
 import com.springcourse.exceptions.NotFoundException;
+import com.springcourse.model.PaginationModel;
+import com.springcourse.model.PaginationRequestModel;
 import com.springcourse.repositories.RequestRepository;
 import com.springcourse.repositories.RequestStageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -40,5 +46,16 @@ public class RequestStageService {
     public List<RequestStage> listAllByRequestId(Long id) {
         List<RequestStage> allByRequestId = requestStageRepository.findAllByRequestId(id);
         return allByRequestId;
+    }
+
+    public PaginationModel<RequestStage> listAllByRequestStageIdOnLazyModel(Long requestId, PaginationRequestModel pagination) {
+
+        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getSize());
+        Page<RequestStage> page = requestStageRepository.findAllByRequestId(requestId, pageable);
+
+        PaginationModel<RequestStage> paginationModel = new PaginationModel<>((int)page.getTotalElements(),
+                page.getSize(), page.getTotalPages(), page.getContent());
+
+        return paginationModel;
     }
 }

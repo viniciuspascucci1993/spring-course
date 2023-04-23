@@ -2,9 +2,13 @@ package com.springcourse.controller;
 
 import com.springcourse.domain.Request;
 import com.springcourse.domain.RequestStage;
+import com.springcourse.domain.User;
+import com.springcourse.model.PaginationModel;
+import com.springcourse.model.PaginationRequestModel;
 import com.springcourse.services.RequestService;
 import com.springcourse.services.RequestStageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,14 +48,27 @@ public class RequestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Request>> getRequestListAll() {
-        List<Request> listRequests = requestService.getList();
-        return ResponseEntity.ok(listRequests);
+    public ResponseEntity<PaginationModel<Request>> getRequestsListPagination(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size) {
+
+        PaginationRequestModel paginationRequestModel = new PaginationRequestModel(page, size);
+        PaginationModel<Request> paginationModel = requestService.getListWithPagination(paginationRequestModel);
+
+        return ResponseEntity.ok(paginationModel);
     }
 
     @GetMapping("/{id}/request-stages")
-    public ResponseEntity<List<RequestStage>> getListOffAllRequestStages(@PathVariable(name = "id") Long id) {
-        List<RequestStage> stages = requestStageService.listAllByRequestId(id);
-        return ResponseEntity.ok(stages);
+    public ResponseEntity<PaginationModel<RequestStage>> getListOffAllRequestStages(
+            @PathVariable(name = "id") Long id,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size) {
+
+
+        PaginationRequestModel paginationRequestModel = new PaginationRequestModel(page, size);
+        PaginationModel<RequestStage> paginationModel = requestStageService
+                .listAllByRequestStageIdOnLazyModel(id, paginationRequestModel);
+
+        return ResponseEntity.ok(paginationModel);
     }
 }
