@@ -3,9 +3,12 @@ package com.springcourse.controller;
 import com.springcourse.domain.Request;
 import com.springcourse.domain.User;
 import com.springcourse.dto.UserLoginDTO;
+import com.springcourse.model.PaginationModel;
+import com.springcourse.model.PaginationRequestModel;
 import com.springcourse.services.RequestService;
 import com.springcourse.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,9 +48,14 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsersList() {
-        List<User> usersList = userService.getList();
-        return ResponseEntity.ok(usersList);
+    public ResponseEntity<PaginationModel<User>> getUsersList(
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size) {
+
+        PaginationRequestModel paginationRequestModel = new PaginationRequestModel(page, size);
+        PaginationModel<User> paginationModel = userService.getListWithPagination(paginationRequestModel);
+
+        return ResponseEntity.ok(paginationModel);
     }
 
     @PutMapping("/{id}")

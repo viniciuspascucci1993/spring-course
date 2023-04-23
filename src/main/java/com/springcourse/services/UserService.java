@@ -2,9 +2,14 @@ package com.springcourse.services;
 
 import com.springcourse.domain.User;
 import com.springcourse.exceptions.NotFoundException;
+import com.springcourse.model.PaginationModel;
+import com.springcourse.model.PaginationRequestModel;
 import com.springcourse.repositories.UserRepository;
 import com.springcourse.services.util.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +44,17 @@ public class UserService {
     public List<User> getList() {
         List<User> users = userRepository.findAll();
         return users;
+    }
+
+    public PaginationModel<User> getListWithPagination(PaginationRequestModel paginationRequestModel) {
+        Pageable pageable = PageRequest.of(paginationRequestModel.getPage(), paginationRequestModel.getSize());
+        Page<User> page = userRepository.findAll(pageable);
+
+        PaginationModel<User> paginationModel = new PaginationModel<>((int)page.getTotalElements(),
+                page.getSize(), page.getTotalPages(), page.getContent());
+
+        return paginationModel;
+
     }
 
     public User login(String email, String password) {
