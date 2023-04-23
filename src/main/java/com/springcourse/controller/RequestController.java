@@ -49,8 +49,8 @@ public class RequestController {
 
     @GetMapping
     public ResponseEntity<PaginationModel<Request>> getRequestsListPagination(
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "size") int size) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
 
         PaginationRequestModel paginationRequestModel = new PaginationRequestModel(page, size);
         PaginationModel<Request> paginationModel = requestService.getListWithPagination(paginationRequestModel);
@@ -61,8 +61,8 @@ public class RequestController {
     @GetMapping("/{id}/request-stages")
     public ResponseEntity<PaginationModel<RequestStage>> getListOffAllRequestStages(
             @PathVariable(name = "id") Long id,
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "size") int size) {
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
 
 
         PaginationRequestModel paginationRequestModel = new PaginationRequestModel(page, size);
