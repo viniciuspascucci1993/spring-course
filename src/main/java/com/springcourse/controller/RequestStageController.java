@@ -1,11 +1,14 @@
 package com.springcourse.controller;
 
 import com.springcourse.domain.RequestStage;
+import com.springcourse.dto.RequestStageSaveDTO;
 import com.springcourse.services.RequestStageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "request-stages")
@@ -19,8 +22,10 @@ public class RequestStageController {
     }
 
     @PostMapping
-    public ResponseEntity<RequestStage> save(@RequestBody RequestStage requestStage) {
-        RequestStage createdRequestStage = requestStageService.save(requestStage);
+    public ResponseEntity<RequestStage> save(@Valid @RequestBody RequestStageSaveDTO requestStageSaveDTO) {
+
+        RequestStage requestStageSave = requestStageSaveDTO.transformToRequestStage();
+        RequestStage createdRequestStage = requestStageService.save(requestStageSave);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRequestStage);
     }
 
