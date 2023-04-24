@@ -171,4 +171,11 @@ public class UserRepositoryTest {
 
     }
 
+    @Test
+    public void shouldTestUpdateRoleTest() {
+
+        int affectedRows = userRepository.updateRole(2L, Role.SIMPLE);
+        assertThat(affectedRows).isEqualTo(1);
+    }
+
 }

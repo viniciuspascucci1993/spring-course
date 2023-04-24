@@ -1,6 +1,7 @@
 package com.springcourse.services;
 
 import com.springcourse.domain.User;
+import com.springcourse.enums.Role;
 import com.springcourse.exceptions.NotFoundException;
 import com.springcourse.model.PaginationModel;
 import com.springcourse.model.PaginationRequestModel;
@@ -61,5 +62,9 @@ public class UserService {
         password = HashUtil.getSecurityHashForPassword(password);
         Optional<User> login = userRepository.login(email, password);
         return login.get();
+    }
+
+    public int updateRole(User user) {
+        return userRepository.updateRole(user.getId(), user.getRole());
     }
 }

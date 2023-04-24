@@ -3,6 +3,7 @@ package com.springcourse.controller;
 import com.springcourse.domain.Request;
 import com.springcourse.domain.User;
 import com.springcourse.dto.UserLoginDTO;
+import com.springcourse.dto.UserUpdateRoleDTO;
 import com.springcourse.model.PaginationModel;
 import com.springcourse.model.PaginationRequestModel;
 import com.springcourse.services.RequestService;
@@ -78,5 +79,18 @@ public class UserController {
         return ResponseEntity.ok(paginationModel);
     }
 
+    @PatchMapping("/role/{id}")
+    public ResponseEntity<?> updateRole(@PathVariable(value = "id") Long id,
+                                    @RequestBody UserUpdateRoleDTO userUpdateRoleDTO) {
 
+        User user = User.builder()
+                .id(id)
+                .role(userUpdateRoleDTO.getRole())
+                .build();
+
+        userService.updateRole(user);
+
+        return ResponseEntity.ok().build();
+
+    }
 }
