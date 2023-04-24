@@ -9,12 +9,11 @@ import com.springcourse.model.PaginationRequestModel;
 import com.springcourse.services.RequestService;
 import com.springcourse.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "users")
@@ -31,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<User> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
         User userLogged = userService.login(userLoginDTO.getEmail(), userLoginDTO.getPassword());
         return ResponseEntity.ok(userLogged);
     }
