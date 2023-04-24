@@ -3,6 +3,8 @@ package com.springcourse.controller;
 import com.springcourse.domain.Request;
 import com.springcourse.domain.RequestStage;
 import com.springcourse.domain.User;
+import com.springcourse.dto.RequestSaveDTO;
+import com.springcourse.dto.RequestUpdateDTO;
 import com.springcourse.model.PaginationModel;
 import com.springcourse.model.PaginationRequestModel;
 import com.springcourse.services.RequestService;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,13 +38,18 @@ public class RequestController {
     }
 
     @PostMapping
-    public ResponseEntity<Request> save(@RequestBody Request request) {
-        Request createdRequest = requestService.save(request);
+    public ResponseEntity<Request> save(@Valid @RequestBody RequestSaveDTO requestSaveDTO) {
+
+        Request requestSave = requestSaveDTO.transformToRequest();
+        Request createdRequest = requestService.save(requestSave);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRequest);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Request> update(@PathVariable(name = "id") Long id, @RequestBody Request request) {
+    public ResponseEntity<Request> update(@PathVariable(name = "id") Long id, @Valid @RequestBody
+                            RequestUpdateDTO requestUpdateDTO) {
+
+        Request request = requestUpdateDTO.transformToRequest();
         request.setId(id);
         Request updatedRequest = requestService.updateRequest(request);
         return ResponseEntity.ok(updatedRequest);
