@@ -3,6 +3,8 @@ package com.springcourse.controller;
 import com.springcourse.domain.Request;
 import com.springcourse.domain.User;
 import com.springcourse.dto.UserLoginDTO;
+import com.springcourse.dto.UserSaveDTO;
+import com.springcourse.dto.UserUpdateDTO;
 import com.springcourse.dto.UserUpdateRoleDTO;
 import com.springcourse.model.PaginationModel;
 import com.springcourse.model.PaginationRequestModel;
@@ -42,8 +44,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user) {
-        User createdUser = userService.save(user);
+    public ResponseEntity<User> save(@Valid @RequestBody UserSaveDTO userSaveDTO) {
+        User userToSave = userSaveDTO.transformToUser();
+        User createdUser = userService.save(userToSave);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
@@ -59,7 +62,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@PathVariable(name = "id") Long id , @RequestBody User user) {
+    public ResponseEntity<User> update(@PathVariable(name = "id") Long id , @Valid @RequestBody UserUpdateDTO
+            userUpdateDTO) {
+
+        User user = userUpdateDTO.transformToUser();
         user.setId(id);
         User updatedUser = userService.updateUser(user);
         return ResponseEntity.ok(updatedUser);
@@ -80,7 +86,7 @@ public class UserController {
 
     @PatchMapping("/role/{id}")
     public ResponseEntity<?> updateRole(@PathVariable(value = "id") Long id,
-                                    @RequestBody UserUpdateRoleDTO userUpdateRoleDTO) {
+                                        @Valid @RequestBody UserUpdateRoleDTO userUpdateRoleDTO) {
 
         User user = User.builder()
                 .id(id)
