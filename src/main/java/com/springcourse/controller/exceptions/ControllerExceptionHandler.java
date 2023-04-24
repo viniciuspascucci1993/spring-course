@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
+
+    public static final String DETAIL_MESSAGE = "Invalid Fields";
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handlerNotFound(NotFoundException ex) {
@@ -26,8 +30,12 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                               HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        String detailMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-        ApiError error = new ApiError(HttpStatus.BAD_REQUEST.value(), detailMessage, new Date());
+        List<String> errors = new ArrayList<>();
+        ex.getBindingResult().getAllErrors().forEach(objectError -> {
+            errors.add(objectError.getDefaultMessage());
+        });
+
+        ApiFieldErrors error = new ApiFieldErrors(HttpStatus.BAD_REQUEST.value(), DETAIL_MESSAGE, new Date(), errors);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 

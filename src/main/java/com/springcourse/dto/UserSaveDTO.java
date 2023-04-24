@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserSaveDTO {
 
-    @NotBlank
+    @NotBlank(message = "Name is Required!")
     private String name;
     @Email(message = "Invalid E-mail Address!")
     private String email;
