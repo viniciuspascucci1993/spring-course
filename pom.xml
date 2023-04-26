@@ -13,8 +13,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-course</name>
 	<description>Projeto em Spring boot</description>
+	<packaging>war</packaging>
 	<properties>
 		<java.version>11</java.version>
+		<skipTests>true</skipTests>
 	</properties>
 	<dependencies>
 		<dependency>
